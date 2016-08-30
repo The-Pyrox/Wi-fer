@@ -42,16 +42,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
 
-        myPeerListListener = new WifiP2pManager.PeerListListener() {
-            @Override
-            public void onPeersAvailable(WifiP2pDeviceList peerlist) {
-                peers.addAll(peerlist.getDeviceList());
-
-            }
-        };
-        adapter = new ArrayAdapter<WifiP2pDevice>(this,R.layout.device_list,peers);
-        ListView listView = (ListView) findViewById(R.id.list_view);
-        listView.setAdapter(adapter);
 
 
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
@@ -78,11 +68,12 @@ public class MainActivity extends Activity {
         unregisterReceiver(mReceiver);
     }
 
-    public void search() {
+    public void search(View view){
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 Toast.makeText(MainActivity.this, "Discovery Initiated", Toast.LENGTH_SHORT).show();
+                show_peer();
             }
 
             @Override
@@ -90,6 +81,23 @@ public class MainActivity extends Activity {
                 Toast.makeText(MainActivity.this, "Discovery Failed", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void show_peer(){
+        myPeerListListener = new WifiP2pManager.PeerListListener() {
+            @Override
+            public void onPeersAvailable(WifiP2pDeviceList peerlist) {
+                peers.addAll(peerlist.getDeviceList());
+
+
+            }
+        };
+
+
+        adapter = new ArrayAdapter<WifiP2pDevice>(this,R.layout.device_list,peers);
+        ListView listView = (ListView) findViewById(R.id.list_view);
+        listView.setAdapter(adapter);
+
     }
 
 
