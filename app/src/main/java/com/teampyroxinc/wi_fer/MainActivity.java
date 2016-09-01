@@ -23,26 +23,22 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity  {
 
 
     WifiP2pManager mManager;
     WifiP2pManager.Channel mChannel;
     BroadcastReceiver mReceiver;
     IntentFilter mIntentFilter;
-    WifiP2pManager.PeerListListener myPeerListListener;
     private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
     private WifiP2pDevice device;
-    private ArrayAdapter<WifiP2pDevice> adapter;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
 
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
@@ -68,12 +64,15 @@ public class MainActivity extends Activity {
         unregisterReceiver(mReceiver);
     }
 
-    public void search(View view){
+    public void search(View view) {
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 Toast.makeText(MainActivity.this, "Discovery Initiated", Toast.LENGTH_SHORT).show();
-                show_peer();
+                final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager()
+                        .findFragmentById(R.id.fragment);
+                fragment.onInitiateDiscovery();
+
             }
 
             @Override
@@ -83,22 +82,7 @@ public class MainActivity extends Activity {
         });
     }
 
-    public void show_peer(){
-        myPeerListListener = new WifiP2pManager.PeerListListener() {
-            @Override
-            public void onPeersAvailable(WifiP2pDeviceList peerlist) {
-                peers.addAll(peerlist.getDeviceList());
 
-
-            }
-        };
-
-
-        adapter = new ArrayAdapter<WifiP2pDevice>(this,R.layout.device_list,peers);
-        ListView listView = (ListView) findViewById(R.id.list_view);
-        listView.setAdapter(adapter);
-
-    }
 
 
 
