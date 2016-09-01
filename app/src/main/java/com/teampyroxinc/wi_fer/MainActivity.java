@@ -65,13 +65,14 @@ public class MainActivity extends Activity  {
     }
 
     public void search(View view) {
+        final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager()
+                .findFragmentById(R.id.fragment);
+        fragment.onInitiateDiscovery();
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 Toast.makeText(MainActivity.this, "Discovery Initiated", Toast.LENGTH_SHORT).show();
-                final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager()
-                        .findFragmentById(R.id.fragment);
-                fragment.onInitiateDiscovery();
+
 
             }
 
