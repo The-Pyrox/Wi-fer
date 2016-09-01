@@ -9,7 +9,6 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
 
     private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
-    ProgressDialog progressDialog = null;
     View mContentView = null;
     private WifiP2pDevice device;
     @Override
@@ -89,9 +87,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peerList) {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
+
         peers.clear();
         peers.addAll(peerList.getDeviceList());
         ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
@@ -99,27 +95,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
     }
 
-    public void clearPeers() {
-        peers.clear();
-        ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
-    }
 
-    /**
-     *
-     */
-    public void onInitiateDiscovery() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-        progressDialog = ProgressDialog.show(getActivity(), "Press back to cancel", "finding peers", true,
-                true, new DialogInterface.OnCancelListener() {
-
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-
-                    }
-                });
-    }
 
     /**
      * An interface-callback for the activity to listen to fragment interaction

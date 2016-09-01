@@ -32,8 +32,6 @@ public class WifiDirectBroadcastReciever extends BroadcastReceiver {
         if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
             // Check to see if Wi-Fi is enabled and notify appropriate activity
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
-            // Call WifiP2pManager.requestPeers() to get a list of current peers
-
             if (mManager != null) {
                 mManager.requestPeers(mChannel, (WifiP2pManager.PeerListListener) mActivity.getFragmentManager()
                         .findFragmentById(R.id.fragment));
@@ -42,10 +40,7 @@ public class WifiDirectBroadcastReciever extends BroadcastReceiver {
             // Respond to new connection or disconnections
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             // Respond to this device's wifi state changing
-            DeviceListFragment fragment = (DeviceListFragment) mActivity.getFragmentManager()
-                    .findFragmentById(R.id.fragment);
         }
-
     }
 
     @Override
