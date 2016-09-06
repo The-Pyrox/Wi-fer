@@ -1,8 +1,11 @@
 package com.teampyroxinc.wi_fer;
 
+
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -15,23 +18,30 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Poojan on 9/1/2016.
- */
+
 public class DeviceListFragment extends ListFragment implements WifiP2pManager.PeerListListener {
+
+
+    WifiP2pManager mManager;
+    WifiP2pManager.Channel mChannel;
+
 
 
     private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
     View mContentView = null;
-    private WifiP2pDevice device;
+
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.device_list, peers));
+
+
 
     }
 
@@ -42,13 +52,14 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     }
 
 
-
-
-
     @Override
+
     public void onListItemClick(ListView l, View v, int position, long id) {
         WifiP2pDevice device = (WifiP2pDevice) getListAdapter().getItem(position);
-        ((DeviceActionListener) getActivity()).showDetails(device);
+        WifiP2pConfig config = new WifiP2pConfig();
+        config.deviceAddress = device.deviceAddress;
+        ((DeviceActionListener) getActivity()).connect(config);
+
     }
 
     /**
@@ -68,13 +79,13 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View v = convertView;
-            if (v==null) {
+            if (v == null) {
                 LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(
                         Context.LAYOUT_INFLATER_SERVICE);
                 v = vi.inflate(R.layout.device_list, null);
             }
             WifiP2pDevice device = items.get(position);
-            if (device!=null) {
+            if (device != null) {
                 TextView top = (TextView) v.findViewById(R.id.device_name);
                 top.setText(device.deviceName);
             }
@@ -82,7 +93,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
         }
     }
-
 
 
     @Override
@@ -94,24 +104,12 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
 
     }
-
-
-
-    /**
-     * An interface-callback for the activity to listen to fragment interaction
-     * events.
-     */
-    public interface DeviceActionListener {
-
-        void showDetails(WifiP2pDevice device);
-
-        void cancelDisconnect();
+    public interface DeviceActionListener{
 
         void connect(WifiP2pConfig config);
 
-        void disconnect();
-    }
 
+    }
 
 
 

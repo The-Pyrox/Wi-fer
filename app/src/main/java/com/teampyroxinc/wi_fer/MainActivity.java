@@ -3,7 +3,9 @@ package com.teampyroxinc.wi_fer;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
@@ -12,7 +14,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity  {
+public class MainActivity extends Activity implements DeviceListFragment.DeviceActionListener {
 
 
     WifiP2pManager mManager;
@@ -23,6 +25,23 @@ public class MainActivity extends Activity  {
     private WifiP2pDevice device;
 
 
+    @Override
+    public void connect(WifiP2pConfig config) {
+        mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Intent i = new Intent(MainActivity.this,SendActivity.class);
+                startActivity(i);
+            }
+
+            @Override
+            public void onFailure(int i) {
+                Toast.makeText(MainActivity.this,"Connection Failed",Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +86,7 @@ public class MainActivity extends Activity  {
             }
         });
     }
+
 
 
 

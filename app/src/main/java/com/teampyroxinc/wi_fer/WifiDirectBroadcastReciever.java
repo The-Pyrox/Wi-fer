@@ -5,10 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.IBinder;
+import android.widget.Toast;
 
-/**
- * Created by Poojan on 8/26/2016.
- */
+
 public class WifiDirectBroadcastReciever extends BroadcastReceiver {
 
     private WifiP2pManager mManager;
@@ -37,7 +36,9 @@ public class WifiDirectBroadcastReciever extends BroadcastReceiver {
                         .findFragmentById(R.id.fragment));
             }
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
-            // Respond to new connection or disconnections
+
+
+
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             // Respond to this device's wifi state changing
         }
