@@ -12,7 +12,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/textout"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -24,8 +24,8 @@
         android:text="Large Text"
         android:id="@+id/textView"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/editText"
-        android:layout_alignEnd="@+id/editText"
+        android:layout_alignRight="@+id/textout"
+        android:layout_alignEnd="@+id/textout"
         android:layout_marginRight="174dp"
         android:layout_marginEnd="174dp" />
 
