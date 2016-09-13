@@ -33,11 +33,17 @@ public class SendActivity extends AppCompatActivity implements WifiP2pManager.Co
 
     private int port;
     private String host;
+    private int d;
+    private TextView display;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send);
+        display=(TextView)findViewById(R.id.display);
+        FileServerAsyncTask aynctask = new FileServerAsyncTask(port);
+
+
     }
 
     public void send_data(View view){
@@ -45,17 +51,11 @@ public class SendActivity extends AppCompatActivity implements WifiP2pManager.Co
 
         try {
             EditText textout = (EditText)findViewById(R.id.textout);
-            /**
-             * Create a client socket with the host,
-             * port, and timeout information.
-             */
+
             socket.bind(null);
             socket.connect((new InetSocketAddress(host, port)), 500);
 
-            /**
-             * Create a byte stream from a JPEG file and pipe it to the output stream
-             * of the socket. This data will be retrieved by the server device.
-             */
+
             OutputStream outputStream = socket.getOutputStream();
             InputStream inputStream = null;
             byte[] buf = textout.getText().toString().getBytes();
@@ -64,22 +64,18 @@ public class SendActivity extends AppCompatActivity implements WifiP2pManager.Co
             outputStream.close();
             inputStream.close();
         } catch (FileNotFoundException e) {
-            //catch logic
+
         } catch (IOException e) {
-            //catch logic
+
         }
 
-/**
- * Clean up any open sockets when done
- * transferring or if an exception occurred.
- */
         finally {
             if (socket != null) {
                 if (socket.isConnected()) {
                     try {
                         socket.close();
                     } catch (IOException e) {
-                        //catch logic
+
                     }
                 }
             }
@@ -96,23 +92,43 @@ public class SendActivity extends AppCompatActivity implements WifiP2pManager.Co
         }
         else if (wifiP2pInfo.groupFormed) {
             ((TextView) findViewById(R.id.textView2)).setText("Client");
-            port = inetSocketAddress.getPort();
-            host = inetSocketAddress.getHostName();
+
+
         }
     }
 
     public static class FileServerAsyncTask extends AsyncTask{
-        private Context context;
-        private TextView statusText;
-        public FileServerAsyncTask(Context context, View statusText) {
-            this.context = context;
-            this.statusText = (TextView) statusText;
+
+
+        private int port;
+
+
+        public FileServerAsyncTask(int port) {
+
+            this.port = port;
+
+
+
         }
+
         @Override
         protected Object doInBackground(Object[] objects) {
-            Socket socket = null;
-            byte buf[]  = new byte[1024];
-            return null;
+            int b = 0;
+            try {
+                
+                byte buf[] = new byte[1024];
+
+                ServerSocket serverSocket = new ServerSocket(port);
+                Socket socket = serverSocket.accept();
+                InputStream inputStream = socket.getInputStream();
+                b =inputStream.read(buf);
+                serverSocket.close();
+
+
+            } catch (IOException e) {
+
+            }
+            return b;
         }
     }
 }
