@@ -1,49 +1,36 @@
 package com.teampyroxinc.wi_fer;
 
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class SendActivity extends AppCompatActivity implements WifiP2pManager.ConnectionInfoListener {
     private InetSocketAddress inetSocketAddress;
 
-    
+    private int port;
     private String host;
     private int d;
-    private TextView display;
+    private static TextView display;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send);
         display=(TextView)findViewById(R.id.display);
-        FileServerAsyncTask aynctask = new FileServerAsyncTask(8888);
-
-
+        FileServerAsyncTask asynctask = new FileServerAsyncTask(8888);
+        asynctask.execute();
     }
 
     public void send_data(View view){
@@ -87,13 +74,11 @@ public class SendActivity extends AppCompatActivity implements WifiP2pManager.Co
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
         if (wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner) {
-            
             host = inetSocketAddress.getHostName();
         }
         else if (wifiP2pInfo.groupFormed) {
             ((TextView) findViewById(R.id.textView2)).setText("Client");
             host = inetSocketAddress.getHostName();
-
 
 
         }
@@ -106,31 +91,32 @@ public class SendActivity extends AppCompatActivity implements WifiP2pManager.Co
 
 
         public FileServerAsyncTask(int port) {
-
             this.port = port;
-
-
-
         }
 
         @Override
         protected Object doInBackground(Object[] objects) {
             int b = 0;
             try {
-                
                 byte buf[] = new byte[1024];
 
                 ServerSocket serverSocket = new ServerSocket(port);
                 Socket socket = serverSocket.accept();
                 InputStream inputStream = socket.getInputStream();
                 b =inputStream.read(buf);
+                showoutput(b);
                 serverSocket.close();
 
 
             } catch (IOException e) {
 
             }
-            return b;
+            return null;
         }
+    }
+
+    public static void showoutput(int a){
+        display.setText(String.valueOf(a));
+
     }
 }
