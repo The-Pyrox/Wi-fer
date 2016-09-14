@@ -31,7 +31,7 @@ import java.net.UnknownHostException;
 public class SendActivity extends AppCompatActivity implements WifiP2pManager.ConnectionInfoListener {
     private InetSocketAddress inetSocketAddress;
 
-    private int port;
+    
     private String host;
     private int d;
     private TextView display;
@@ -53,7 +53,7 @@ public class SendActivity extends AppCompatActivity implements WifiP2pManager.Co
             EditText textout = (EditText)findViewById(R.id.textout);
 
             socket.bind(null);
-            socket.connect((new InetSocketAddress(host, port)), 500);
+            socket.connect((new InetSocketAddress(host, 8888)), 500);
 
 
             OutputStream outputStream = socket.getOutputStream();
@@ -87,7 +87,7 @@ public class SendActivity extends AppCompatActivity implements WifiP2pManager.Co
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
         if (wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner) {
-            port = inetSocketAddress.getPort();
+            
             host = inetSocketAddress.getHostName();
         }
         else if (wifiP2pInfo.groupFormed) {
