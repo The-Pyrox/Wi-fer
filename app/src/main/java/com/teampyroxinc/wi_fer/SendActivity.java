@@ -41,7 +41,7 @@ public class SendActivity extends AppCompatActivity implements WifiP2pManager.Co
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send);
         display=(TextView)findViewById(R.id.display);
-        FileServerAsyncTask aynctask = new FileServerAsyncTask(port);
+        FileServerAsyncTask aynctask = new FileServerAsyncTask(8888);
 
 
     }
@@ -92,6 +92,8 @@ public class SendActivity extends AppCompatActivity implements WifiP2pManager.Co
         }
         else if (wifiP2pInfo.groupFormed) {
             ((TextView) findViewById(R.id.textView2)).setText("Client");
+            host = inetSocketAddress.getHostName();
+
 
 
         }
