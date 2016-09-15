@@ -12,6 +12,8 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,12 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
     private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
     private WifiP2pDevice device;
     private WifiP2pManager.ConnectionInfoListener listener;
+
+    public InetAddress getInetAddress() {
+        return inetAddress;
+    }
+
+    public InetAddress inetAddress;
 
 
     @Override
@@ -61,6 +69,7 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
                 }
                 else if (wifiP2pInfo.groupFormed){
                     Intent j = new Intent(MainActivity.this,ClientActivity.class);
+                    inetAddress = wifiP2pInfo.groupOwnerAddress;
                     startActivity(j);
 
                 }
@@ -119,6 +128,7 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
         }
         else if (wifiP2pInfo.groupFormed){
             Intent j = new Intent(MainActivity.this,ClientActivity.class);
+            inetAddress = wifiP2pInfo.groupOwnerAddress;
             startActivity(j);
 
         }

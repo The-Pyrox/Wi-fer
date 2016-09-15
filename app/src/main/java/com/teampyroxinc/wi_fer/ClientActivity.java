@@ -12,12 +12,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketAddress;
 
 public class ClientActivity extends AppCompatActivity  {
-    private InetSocketAddress inetSocketAddress;
+    private InetAddress inetAddress;
+    public MainActivity mainActivity;
+    private boolean local=true;
 
     private int port;
     private String host;
@@ -29,9 +33,10 @@ public class ClientActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send);
         display=(TextView)findViewById(R.id.display);
+        mainActivity = new MainActivity();
 
 
-
+        inetAddress = mainActivity.getInetAddress();
 
     }
 
@@ -39,13 +44,11 @@ public class ClientActivity extends AppCompatActivity  {
         Socket socket = new Socket();
 
         try {
-            EditText textout = (EditText)findViewById(R.id.textout);
-            inetSocketAddress = new InetSocketAddress(8888);
 
+            EditText textout = (EditText)findViewById(R.id.textout);
 
             socket.bind(null);
-            socket.connect(inetSocketAddress);
-
+            socket.connect(new InetSocketAddress(inetAddress,8080),5000);
 
             OutputStream outputStream = socket.getOutputStream();
             InputStream inputStream = null;
@@ -60,17 +63,6 @@ public class ClientActivity extends AppCompatActivity  {
 
         }
 
-        finally {
-            if (socket != null) {
-                if (socket.isConnected()) {
-                    try {
-                        socket.close();
-                    } catch (IOException e) {
-
-                    }
-                }
-            }
-        }
 
     }
 

@@ -18,7 +18,7 @@ public class ServerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server);
         display = (TextView)findViewById(R.id.display);
-        FileServerAsyncTask asyncTask = new FileServerAsyncTask(8888);
+        FileServerAsyncTask asyncTask = new FileServerAsyncTask(8080);
         asyncTask.execute();
 
     }
