@@ -16,7 +16,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class SendActivity extends AppCompatActivity implements WifiP2pManager.ConnectionInfoListener {
+public class ClientActivity extends AppCompatActivity  {
     private InetSocketAddress inetSocketAddress;
 
     private int port;
@@ -29,8 +29,10 @@ public class SendActivity extends AppCompatActivity implements WifiP2pManager.Co
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send);
         display=(TextView)findViewById(R.id.display);
-        FileServerAsyncTask asynctask = new FileServerAsyncTask(8888);
-        asynctask.execute();
+
+
+
+
     }
 
     public void send_data(View view){
@@ -38,9 +40,11 @@ public class SendActivity extends AppCompatActivity implements WifiP2pManager.Co
 
         try {
             EditText textout = (EditText)findViewById(R.id.textout);
+            inetSocketAddress = new InetSocketAddress(8888);
+
 
             socket.bind(null);
-            socket.connect((new InetSocketAddress(host, 8888)), 500);
+            socket.connect(inetSocketAddress);
 
 
             OutputStream outputStream = socket.getOutputStream();
@@ -71,52 +75,6 @@ public class SendActivity extends AppCompatActivity implements WifiP2pManager.Co
     }
 
 
-    @Override
-    public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
-        if (wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner) {
-            host = inetSocketAddress.getHostName();
-        }
-        else if (wifiP2pInfo.groupFormed) {
-            ((TextView) findViewById(R.id.textView2)).setText("Client");
-            host = inetSocketAddress.getHostName();
 
 
-        }
-    }
-
-    public static class FileServerAsyncTask extends AsyncTask{
-
-
-        private int port;
-
-
-        public FileServerAsyncTask(int port) {
-            this.port = port;
-        }
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            int b = 0;
-            try {
-                byte buf[] = new byte[1024];
-
-                ServerSocket serverSocket = new ServerSocket(port);
-                Socket socket = serverSocket.accept();
-                InputStream inputStream = socket.getInputStream();
-                b =inputStream.read(buf);
-                showoutput(b);
-                serverSocket.close();
-
-
-            } catch (IOException e) {
-
-            }
-            return null;
-        }
-    }
-
-    public static void showoutput(int a){
-        display.setText(String.valueOf(a));
-
-    }
 }

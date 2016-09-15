@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.view.View;
@@ -14,7 +15,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity implements DeviceListFragment.DeviceActionListener {
+public class MainActivity extends Activity implements DeviceListFragment.DeviceActionListener,WifiP2pManager.ConnectionInfoListener {
 
 
     WifiP2pManager mManager;
@@ -23,6 +24,7 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
     IntentFilter mIntentFilter;
     private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
     private WifiP2pDevice device;
+    private WifiP2pManager.ConnectionInfoListener listener;
 
 
     @Override
@@ -30,8 +32,10 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                Intent i = new Intent(MainActivity.this,SendActivity.class);
-                startActivity(i);
+                Toast.makeText(MainActivity.this, "Connection Successful", Toast.LENGTH_SHORT).show();
+                mManager.requestConnectionInfo(mChannel,listener);
+
+
             }
 
             @Override
@@ -47,6 +51,22 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        listener = new WifiP2pManager.ConnectionInfoListener() {
+            @Override
+            public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
+                if (wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner){
+                    Intent i = new Intent(MainActivity.this,ServerActivity.class);
+                    startActivity(i);
+
+                }
+                else if (wifiP2pInfo.groupFormed){
+                    Intent j = new Intent(MainActivity.this,ClientActivity.class);
+                    startActivity(j);
+
+                }
+
+            }
+        };
 
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
@@ -78,6 +98,8 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
             @Override
             public void onSuccess() {
                 Toast.makeText(MainActivity.this, "Discovery Initiated", Toast.LENGTH_SHORT).show();
+
+
             }
 
             @Override
@@ -88,8 +110,18 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
     }
 
 
+    @Override
+    public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
+        if (wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner){
+            Intent i = new Intent(MainActivity.this,ServerActivity.class);
+            startActivity(i);
 
+        }
+        else if (wifiP2pInfo.groupFormed){
+            Intent j = new Intent(MainActivity.this,ClientActivity.class);
+            startActivity(j);
 
+        }
 
-
+    }
 }
