@@ -17,18 +17,14 @@ public class ServerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server);
         display = (TextView)findViewById(R.id.display);
-        FileServerAsyncTask asyncTask = new FileServerAsyncTask(8080);
+        ServerAsyncTask asyncTask = new ServerAsyncTask();
         asyncTask.execute();
 
     }
-    public static class FileServerAsyncTask extends AsyncTask {
+    public static class ServerAsyncTask extends AsyncTask {
+        public ServerAsyncTask() {
+            super();
 
-
-        private int port;
-
-
-        public FileServerAsyncTask(int port) {
-            this.port = port;
         }
 
         @Override
@@ -38,7 +34,7 @@ public class ServerActivity extends AppCompatActivity {
                 byte buf[] = new byte[1024];
 
 
-                ServerSocket serverSocket = new ServerSocket(port);
+                ServerSocket serverSocket = new ServerSocket(8080);
                 Socket socket = serverSocket.accept();
                 InputStream inputStream = socket.getInputStream();
                 b =inputStream.read(buf);

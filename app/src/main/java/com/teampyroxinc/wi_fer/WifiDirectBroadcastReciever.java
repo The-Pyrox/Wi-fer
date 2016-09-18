@@ -39,13 +39,11 @@ public class WifiDirectBroadcastReciever extends BroadcastReceiver {
 
 
 
+
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             // Respond to this device's wifi state changing
         }
     }
 
-    @Override
-    public IBinder peekService(Context myContext, Intent service) {
-        return super.peekService(myContext, service);
-    }
+
 }

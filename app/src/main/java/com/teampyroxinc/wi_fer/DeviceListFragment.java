@@ -4,15 +4,13 @@ package com.teampyroxinc.wi_fer;
 
 
 import android.content.Context;
-
-
+import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.app.ListFragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +57,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         WifiP2pDevice device = (WifiP2pDevice) getListAdapter().getItem(position);
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = device.deviceAddress;
+        config.wps.setup = WpsInfo.PBC;
         ((DeviceActionListener) getActivity()).connect(config);
 
     }

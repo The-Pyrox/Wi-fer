@@ -3,6 +3,7 @@ package com.teampyroxinc.wi_fer;
 
 
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,43 +20,58 @@ import java.net.Socket;
 public class ClientActivity extends AppCompatActivity  {
 
     private String host;
-    private static TextView display;
     public Bundle bundle;
+    public  EditText textout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send);
-        display=(TextView)findViewById(R.id.display);
         bundle = getIntent().getExtras();
         host = bundle.getString("Host");
-
+        textout = (EditText)findViewById(R.id.textout);
 
 
     }
 
     public void send_data(View view){
-        Socket socket = new Socket();
+        byte[] buf = textout.getText().toString().getBytes();
+        int len = textout.getText().length();
+        ClientAsyncTask clientAsyncTask = new ClientAsyncTask(host,buf,len);
+        clientAsyncTask.execute();
 
-        try {
 
-            EditText textout = (EditText)findViewById(R.id.textout);
-            socket.bind(null);
-            socket.connect(new InetSocketAddress(host,8080),500);
-            OutputStream outputStream = socket.getOutputStream();
-            InputStream inputStream = null;
-            byte[] buf = textout.getText().toString().getBytes();
-            int len = textout.getText().length();
-            outputStream.write(buf, 0, len);
-            outputStream.close();
-            inputStream.close();
-        } catch (FileNotFoundException e) {
+    }
+    public static class ClientAsyncTask extends AsyncTask{
+        String host_address;
+        byte[] buf;
+        int len;
 
-        } catch (IOException e) {
+        public ClientAsyncTask(String host,byte[] buf,int len) {
+            this.host_address = host;
+            this.buf = buf;
+            this.len = len;
+
 
         }
 
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            Socket socket = new Socket();
+            try {
+                socket.bind(null);
+                socket.connect(new InetSocketAddress(host_address,8080),5000);
+                OutputStream outputStream = socket.getOutputStream();
 
+                outputStream.write(buf, 0, len);
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
     }
 
 

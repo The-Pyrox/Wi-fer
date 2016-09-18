@@ -69,7 +69,7 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
                 else if (wifiP2pInfo.groupFormed){
                     Intent j = new Intent(MainActivity.this,ClientActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("Host",wifiP2pInfo.groupOwnerAddress.getHostName());
+                    bundle.putString("Host",wifiP2pInfo.groupOwnerAddress.getHostAddress());
                     j.putExtras(bundle);
                     startActivity(j);
 
@@ -108,8 +108,6 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
             @Override
             public void onSuccess() {
                 Toast.makeText(MainActivity.this, "Discovery Initiated", Toast.LENGTH_SHORT).show();
-
-
             }
 
             @Override
@@ -130,12 +128,9 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
         else if (wifiP2pInfo.groupFormed){
             Intent j = new Intent(MainActivity.this,ClientActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putString("Host",wifiP2pInfo.groupOwnerAddress.getHostName());
+            bundle.putString("Host",wifiP2pInfo.groupOwnerAddress.getHostAddress());
             j.putExtras(bundle);
             startActivity(j);
-
         }
-
     }
-
 }
