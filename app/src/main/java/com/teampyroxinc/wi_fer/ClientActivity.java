@@ -17,17 +17,20 @@ import java.net.Socket;
 
 
 public class ClientActivity extends AppCompatActivity  {
-    public MainActivity mainActivity;
+
     private String host;
     private static TextView display;
+    public Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send);
         display=(TextView)findViewById(R.id.display);
-        mainActivity = new MainActivity();
-        host = mainActivity.getHost_name();
+        bundle = getIntent().getExtras();
+        host = bundle.getString("Host");
+
+
 
     }
 

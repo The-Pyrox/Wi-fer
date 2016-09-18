@@ -26,7 +26,7 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
     private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
     private WifiP2pDevice device;
     private WifiP2pManager.ConnectionInfoListener listener;
-    public String host_name;
+
 
 
 
@@ -57,6 +57,7 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         listener = new WifiP2pManager.ConnectionInfoListener() {
             @Override
             public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
@@ -67,7 +68,9 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
                 }
                 else if (wifiP2pInfo.groupFormed){
                     Intent j = new Intent(MainActivity.this,ClientActivity.class);
-                    host_name = wifiP2pInfo.groupOwnerAddress.getHostName();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("Host",wifiP2pInfo.groupOwnerAddress.getHostName());
+                    j.putExtras(bundle);
                     startActivity(j);
 
                 }
@@ -126,14 +129,13 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
         }
         else if (wifiP2pInfo.groupFormed){
             Intent j = new Intent(MainActivity.this,ClientActivity.class);
-            host_name = wifiP2pInfo.groupOwnerAddress.getHostName();
+            Bundle bundle = new Bundle();
+            bundle.putString("Host",wifiP2pInfo.groupOwnerAddress.getHostName());
+            j.putExtras(bundle);
             startActivity(j);
 
         }
 
     }
 
-    public String getHost_name() {
-        return host_name;
-    }
 }
