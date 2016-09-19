@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class ServerActivity extends AppCompatActivity {
     public Integer b;
@@ -31,18 +32,18 @@ public class ServerActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
-                byte buf[] = new byte[1024];
+                final byte buf[] = new byte[1024];
 
                 ServerSocket serverSocket = new ServerSocket(SocketServerPORT);
                 Socket socket = serverSocket.accept();
                 InputStream inputStream = socket.getInputStream();
                 b =inputStream.read(buf);
-                serverSocket.close();
+
                 ServerActivity.this.runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
-                        display.setText(String.valueOf(b));
+                        display.setText(String.valueOf(Arrays.toString(buf)));
 
                     }
                 });
