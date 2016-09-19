@@ -60,7 +60,7 @@ public class ClientActivity extends AppCompatActivity  {
             Socket socket = new Socket();
             try {
                 socket.bind(null);
-                socket.connect(new InetSocketAddress(host_address,8080),5000);
+                socket.connect((new InetSocketAddress(host_address,8080)),5000);
                 OutputStream outputStream = socket.getOutputStream();
 
                 outputStream.write(buf, 0, len);

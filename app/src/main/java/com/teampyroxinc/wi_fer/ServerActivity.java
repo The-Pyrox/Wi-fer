@@ -26,7 +26,7 @@ public class ServerActivity extends AppCompatActivity {
     private class SocketServerThread extends Thread {
 
         static final int SocketServerPORT = 8080;
-        int count = 0;
+
 
         @Override
         public void run() {
