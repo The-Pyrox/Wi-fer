@@ -32,18 +32,19 @@ public class ServerActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
-                final byte buf[] = new byte[1024];
+                final byte buf[] = new byte[2];
 
                 ServerSocket serverSocket = new ServerSocket(SocketServerPORT);
                 Socket socket = serverSocket.accept();
                 InputStream inputStream = socket.getInputStream();
                 b =inputStream.read(buf);
+                final String v = new String(buf,"UTF-8");
 
                 ServerActivity.this.runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
-                        display.setText(String.valueOf(Arrays.toString(buf)));
+                        display.setText(v);
 
                     }
                 });
