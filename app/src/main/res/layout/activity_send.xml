@@ -9,25 +9,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ClientActivity">
 
-    <EditText
-        android:layout_width="match_parent"
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textout"
-        android:layout_centerVertical="true"
+        android:text="New Button"
+        android:id="@+id/button"
+        android:onClick="send_client"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <EditText
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textView"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/textout"
-        android:layout_alignEnd="@+id/textout"
-        android:layout_marginRight="174dp"
-        android:layout_marginEnd="174dp" />
+        android:id="@+id/client_out"
+        android:layout_above="@+id/button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="match_parent"
@@ -38,14 +36,4 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button"
-        android:layout_above="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="53dp"
-        android:onClick="send_data"/>
 </RelativeLayout>

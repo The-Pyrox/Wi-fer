@@ -7,8 +7,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 
@@ -16,9 +18,12 @@ public class ClientActivity extends AppCompatActivity  {
 
     private String host;
     public Bundle bundle;
-    public  EditText textout;
+    public  EditText client_out;
     public TextView display;
     ClientAsyncTask clientAsyncTask;
+    boolean connected = true;
+    public Integer b;
+    String v;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,16 +31,59 @@ public class ClientActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_send);
         bundle = getIntent().getExtras();
         host = bundle.getString("Host");
-        textout = (EditText)findViewById(R.id.textout);
+        client_out = (EditText)findViewById(R.id.client_out);
         display = (TextView)findViewById(R.id.display);
+        Thread socketClientThread = new Thread(new SocketClientThread());
+        socketClientThread.start();
 
+
+
+    }
+    private class SocketClientThread extends Thread {
+
+        static final int SocketServerPORT = 8991;
+
+
+        @Override
+        public void run() {
+            try {
+
+                ServerSocket serverSocket = new ServerSocket(SocketServerPORT);
+                while (connected == true) {
+                    final byte buf[] = new byte[1024];
+                    Socket socket = serverSocket.accept();
+
+                    InputStream inputStream = socket.getInputStream();
+                    b = inputStream.read(buf);
+                    v = new String(buf, "UTF-8");
+                    connected = true;
+
+
+
+                    ClientActivity.this.runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            display.setText(v);
+
+
+
+                        }
+                    }
+                    );}
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
 
     }
 
 
-    public void send_data(View view){
-        byte[] buf = textout.getText().toString().getBytes();
-        int len = textout.getText().length();
+
+    public void send_client(View view){
+        byte[] buf = client_out.getText().toString().getBytes();
+        int len = client_out.getText().length();
         clientAsyncTask = new ClientAsyncTask(host,buf,len);
         clientAsyncTask.execute();
 
