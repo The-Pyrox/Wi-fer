@@ -31,10 +31,7 @@ public class ClientActivity extends AppCompatActivity  {
 
 
     }
-    public void closetask(){
-        clientAsyncTask.cancel(true);
 
-    }
 
     public void send_data(View view){
         byte[] buf = textout.getText().toString().getBytes();
@@ -75,11 +72,7 @@ public class ClientActivity extends AppCompatActivity  {
             return null;
         }
 
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-            closetask();
-        }
+
     }
 
 

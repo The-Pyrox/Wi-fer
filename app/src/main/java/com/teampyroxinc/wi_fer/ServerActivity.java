@@ -30,11 +30,6 @@ public class ServerActivity extends AppCompatActivity {
         display = (TextView) findViewById(R.id.display);
         socketServerThread.start();
     }
-    public void server_open(){
-        Thread socketServerThread = new Thread(new SocketServerThread());
-        socketServerThread.start();
-
-    }
 
     private class SocketServerThread extends Thread {
 
@@ -44,9 +39,10 @@ public class ServerActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
-                final byte buf[] = new byte[1024];
+
                 ServerSocket serverSocket = new ServerSocket(SocketServerPORT);
                 while (connected == true) {
+                    final byte buf[] = new byte[1024];
                     Socket socket = serverSocket.accept();
                     InputStream inputStream = socket.getInputStream();
                     b = inputStream.read(buf);
@@ -60,7 +56,7 @@ public class ServerActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         display.setText(v);
-                        server_open();
+
                     }
                 }
                 );}
