@@ -26,7 +26,8 @@
         android:id="@+id/button2"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:onClick="send_client" />
 
     <EditText
         android:layout_width="match_parent"

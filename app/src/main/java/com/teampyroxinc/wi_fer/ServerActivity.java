@@ -15,6 +15,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class ServerActivity extends AppCompatActivity {
     public Integer b;
@@ -22,8 +23,15 @@ public class ServerActivity extends AppCompatActivity {
     public String v;
     Button button;
     boolean connected = true;
+
+    public String getClient_address() {
+        return client_address;
+    }
+
     String client_address;
-    ServerAsyncTask serverasynctask;
+    SocketSendThread socketsendthread;
+    String correct_address;
+
     EditText server_out;
 
 
@@ -35,59 +43,31 @@ public class ServerActivity extends AppCompatActivity {
         button = (Button) findViewById(R.id.button);
         connected = true;
         server_out =(EditText)findViewById(R.id.server_out);
+        Thread socketreceiveThread = new Thread(new SocketReceiveThread());
+        socketreceiveThread.start();
 
-        Thread socketServerThread = new Thread(new SocketServerThread());
+
         display = (TextView) findViewById(R.id.display);
-        socketServerThread.start();
+
     }
+
     public void send_client(View view){
         byte[] buf = server_out.getText().toString().getBytes();
         int len = server_out.getText().length();
-        serverasynctask = new ServerAsyncTask(client_address,buf,len);
-        serverasynctask.execute();
+        correct_address = getClient_address().substring(1);
+        socketsendthread = new SocketSendThread(correct_address,buf,len);
+        socketsendthread.start();
 
 
 
-    }
-
-    public class ServerAsyncTask extends AsyncTask {
-        String host_address;
-        byte[] buf;
-        int len;
-
-        public ServerAsyncTask(String host,byte[] buf,int len) {
-            this.host_address = host;
-            this.buf = buf;
-            this.len = len;
-        }
-
-
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            Socket socket = new Socket();
-            try {
-                socket.bind(null);
-                socket.connect((new InetSocketAddress(host_address,8991)),5000);
-                OutputStream outputStream = socket.getOutputStream();
-                outputStream.write(buf, 0, len);
-                outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-            return null;
-        }
 
 
     }
 
 
+    private class SocketReceiveThread extends Thread {
 
-    private class SocketServerThread extends Thread {
-
-        static final int SocketServerPORT = 8080;
+        static final int SocketServerPORT = 8888;
 
 
         @Override
@@ -103,20 +83,15 @@ public class ServerActivity extends AppCompatActivity {
                     b = inputStream.read(buf);
                     v = new String(buf, "UTF-8");
                     connected = true;
-
-
-
-                ServerActivity.this.runOnUiThread(new Runnable() {
+                    ServerActivity.this.runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
                         display.setText(v);
-
-
-
                     }
                 }
-                );}
+                );
+                }
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -124,6 +99,43 @@ public class ServerActivity extends AppCompatActivity {
         }
 
     }
+
+    public class SocketSendThread extends Thread{
+        String host_address;
+        byte[] buf;
+        int len;
+
+        public SocketSendThread(String host,byte[] buf,int len) {
+            this.host_address = host;
+            this.buf = buf;
+            this.len = len;
+        }
+
+
+        @Override
+        public void run() {
+            Socket socket_send = new Socket();
+            try {
+
+                socket_send.bind(null);
+
+
+
+                socket_send.connect((new InetSocketAddress(host_address,8080)),5000);
+
+
+
+                OutputStream outputStream = socket_send.getOutputStream();
+                outputStream.write(buf, 0, len);
+
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
 
 }
 
