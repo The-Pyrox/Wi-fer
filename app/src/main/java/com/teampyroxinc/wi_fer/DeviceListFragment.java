@@ -1,8 +1,5 @@
 package com.teampyroxinc.wi_fer;
 
-
-
-
 import android.content.Context;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -17,20 +14,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class DeviceListFragment extends ListFragment implements WifiP2pManager.PeerListListener {
-
 
     WifiP2pManager mManager;
     WifiP2pManager.Channel mChannel;
-
-
-
     private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
     View mContentView = null;
 
@@ -39,9 +29,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.device_list, peers));
-
-
-
     }
 
     @Override
@@ -50,9 +37,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         return mContentView;
     }
 
-
     @Override
-
     public void onListItemClick(ListView l, View v, int position, long id) {
         WifiP2pDevice device = (WifiP2pDevice) getListAdapter().getItem(position);
         WifiP2pConfig config = new WifiP2pConfig();
@@ -62,9 +47,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
     }
 
-    /**
-     * Array adapter for ListFragment that maintains WifiP2pDevice list.
-     */
     private class WiFiPeerListAdapter extends ArrayAdapter<WifiP2pDevice> {
 
         private List<WifiP2pDevice> items;
@@ -73,7 +55,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
                                    List<WifiP2pDevice> objects) {
             super(context, textViewResourceId, objects);
             items = objects;
-
         }
 
         @Override
@@ -90,27 +71,17 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
                 top.setText(device.deviceName);
             }
             return v;
-
         }
     }
 
-
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peerList) {
-
         peers.clear();
         peers.addAll(peerList.getDeviceList());
         ((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
-
-
     }
     public interface DeviceActionListener{
 
         void connect(WifiP2pConfig config);
-
-
     }
-
-
-
 }

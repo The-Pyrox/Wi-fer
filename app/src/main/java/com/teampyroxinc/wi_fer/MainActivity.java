@@ -1,6 +1,5 @@
 package com.teampyroxinc.wi_fer;
 
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,7 +17,6 @@ import java.util.List;
 
 public class MainActivity extends Activity implements DeviceListFragment.DeviceActionListener,WifiP2pManager.ConnectionInfoListener {
 
-
     WifiP2pManager mManager;
     WifiP2pManager.Channel mChannel;
     BroadcastReceiver mReceiver;
@@ -27,11 +25,6 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
     private WifiP2pDevice device;
     private WifiP2pManager.ConnectionInfoListener listener;
 
-
-
-
-
-
     @Override
     public void connect(WifiP2pConfig config) {
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
@@ -39,17 +32,13 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
             public void onSuccess() {
                 Toast.makeText(MainActivity.this, "Connection Successful", Toast.LENGTH_SHORT).show();
                 mManager.requestConnectionInfo(mChannel,listener);
-
-
             }
 
             @Override
             public void onFailure(int i) {
                 Toast.makeText(MainActivity.this,"Connection Failed",Toast.LENGTH_LONG).show();
-
             }
         });
-
     }
 
     @Override
@@ -64,7 +53,6 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
                 if (wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner){
                     Intent i = new Intent(MainActivity.this,ServerActivity.class);
                     startActivity(i);
-
                 }
                 else if (wifiP2pInfo.groupFormed){
                     Intent j = new Intent(MainActivity.this,ClientActivity.class);
@@ -72,9 +60,7 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
                     bundle.putString("Host",wifiP2pInfo.groupOwnerAddress.getHostAddress());
                     j.putExtras(bundle);
                     startActivity(j);
-
                 }
-
             }
         };
 
@@ -109,7 +95,6 @@ public class MainActivity extends Activity implements DeviceListFragment.DeviceA
             public void onSuccess() {
                 Toast.makeText(MainActivity.this, "Discovery Initiated", Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void onFailure(int reasonCode) {
                 Toast.makeText(MainActivity.this, "Discovery Failed", Toast.LENGTH_SHORT).show();

@@ -1,6 +1,5 @@
 package com.teampyroxinc.wi_fer;
 
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -35,9 +34,6 @@ public class ClientActivity extends AppCompatActivity  {
         display = (TextView)findViewById(R.id.display);
         Thread socketreceiveThread = new Thread(new SocketReceiveThread());
         socketreceiveThread.start();
-
-
-
     }
 
 
@@ -46,15 +42,11 @@ public class ClientActivity extends AppCompatActivity  {
         int len = client_out.getText().length();
         socketsendthread = new SocketSendThread(host,buf,len);
         socketsendthread.start();
-
-
-
     }
 
     private class SocketReceiveThread extends Thread {
 
         static final int SocketServerPORT = 8080;
-
 
         @Override
         public void run() {
@@ -94,7 +86,6 @@ public class ClientActivity extends AppCompatActivity  {
             this.buf = buf;
             this.len = len;
         }
-
 
         @Override
         public void run() {

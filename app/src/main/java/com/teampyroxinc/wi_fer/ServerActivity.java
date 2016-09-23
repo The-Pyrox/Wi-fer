@@ -1,7 +1,5 @@
 package com.teampyroxinc.wi_fer;
 
-
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,8 +12,6 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.StringTokenizer;
 
 public class ServerActivity extends AppCompatActivity {
     public Integer b;
@@ -23,18 +19,13 @@ public class ServerActivity extends AppCompatActivity {
     public String v;
     Button button;
     boolean connected = true;
-
     public String getClient_address() {
         return client_address;
     }
-
     String client_address;
     SocketSendThread socketsendthread;
     String correct_address;
-
     EditText server_out;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +36,7 @@ public class ServerActivity extends AppCompatActivity {
         server_out =(EditText)findViewById(R.id.server_out);
         Thread socketreceiveThread = new Thread(new SocketReceiveThread());
         socketreceiveThread.start();
-
-
         display = (TextView) findViewById(R.id.display);
-
     }
 
     public void send_client(View view){
@@ -58,17 +46,12 @@ public class ServerActivity extends AppCompatActivity {
         socketsendthread = new SocketSendThread(correct_address,buf,len);
         socketsendthread.start();
 
-
-
-
-
     }
 
 
     private class SocketReceiveThread extends Thread {
 
         static final int SocketServerPORT = 8888;
-
 
         @Override
         public void run() {
@@ -116,18 +99,10 @@ public class ServerActivity extends AppCompatActivity {
         public void run() {
             Socket socket_send = new Socket();
             try {
-
                 socket_send.bind(null);
-
-
-
                 socket_send.connect((new InetSocketAddress(host_address,8080)),5000);
-
-
-
                 OutputStream outputStream = socket_send.getOutputStream();
                 outputStream.write(buf, 0, len);
-
                 outputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
